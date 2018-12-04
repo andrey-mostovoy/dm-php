@@ -12,11 +12,14 @@
 Обратите внимание, что нужно вводить с / на конце.
 Если у сайта есть прикрепленный домен – необходимо указывать его.
 Если же сайт доступен по wwww – сайт необходимо указывать вместе с www. Например: http://www.mywebsite.ucoz.ru/ или http://www.mywebsite.com/
-*/
-$myWebsite = 'http://'.$_SERVER['HTTP_HOST'].'/';
+ */
+//$myWebsite = 'http://'.$_SERVER['HTTP_HOST'].'/';
+$myWebsite = 'https://'.$_SERVER['HTTP_HOST'].'/';
+//$myWebsite = 'http://домик-мечты.рф/';
+//$myWebsite = 'https://домик-мечты.рф/';
 /**
 Закончили формировать ссылку
-*/
+ */
 
 class Request {
     /**
@@ -42,7 +45,7 @@ class Request {
             'oauth_signature_method' => 'HMAC-SHA1',
             'oauth_consumer_key' => $this->config['oauth_consumer_key'],
             'oauth_token' => $this->config['oauth_token'],
-            );
+        );
     }
 
     /**
@@ -88,6 +91,20 @@ class Request {
     }
 
     /**
+     * Создает и возвращает урл запроса.
+     * @param string $url
+     * @param array $data
+     * @return string
+     */
+    public function createGetUrl($url, $data = array()) {
+        global $myWebsite;
+        $this->params['oauth_nonce'] = md5(microtime() . mt_rand());
+        $url = $myWebsite.'uapi' . trim(strtolower($url), '').'';
+        $queryString = http_build_query($this->params + $data + array('oauth_signature' => $this->getSignature('GET', $url, $this->params + $data)));
+        return $url . '?' . $queryString;
+    }
+
+    /**
      * Запрос к API методом POST
      * @param string $url   URL запроса, например /blog
      * @param array $data   Массив данных
@@ -100,7 +117,7 @@ class Request {
         /**
         Делаем так, чтобы изображения при отправке отправлялись,
         а не валились в инвалид сигнутаре
-        */
+         */
         $x=1;
         while ($x<50) {
             if(empty($data['file'.$x])) break;
@@ -110,11 +127,11 @@ class Request {
             if ($pos === false) {
                 $getfile1shop_array = array(
                     'file'.$x => '@'.$getfile1others
-                    );
+                );
             } else {
                 $getfile1shop_array = array(
                     'file'.$x => ''.$getfile1others
-                    );
+                );
             }
             unset($data['file'.$x]);
             $data = array_merge($getfile1shop_array, $data);
@@ -139,11 +156,11 @@ class Request {
                 if ($pos === false) {
                     $getfile1shop_array = array(
                         'file_add_'.$i => '@'.$getfile1shop
-                        );
+                    );
                 } else {
                     $getfile1shop_array = array(
                         'file_add_'.$i => ''.$getfile1shop
-                        );
+                    );
                 }
                 unset($data['file_add_'.$i]);
                 $data = array_merge($getfile1shop_array, $data);
@@ -177,10 +194,10 @@ class Request {
         global $myWebsite;
         $this->params['oauth_nonce'] = md5(microtime() . mt_rand());
 
- /**
+        /**
         Делаем так, чтобы изображения при отправке отправлялись,
         а не валились в инвалид сигнутаре
-        */
+         */
         $x=1;
         while ($x<50) {
             if(empty($data['file'.$x])) break;
@@ -190,11 +207,11 @@ class Request {
             if ($pos === false) {
                 $getfile1shop_array = array(
                     'file'.$x => '@'.$getfile1others
-                    );
+                );
             } else {
                 $getfile1shop_array = array(
                     'file'.$x => ''.$getfile1others
-                    );
+                );
             }
             unset($data['file'.$x]);
             $data = array_merge($getfile1shop_array, $data);
@@ -219,11 +236,11 @@ class Request {
                 if ($pos === false) {
                     $getfile1shop_array = array(
                         'file_add_'.$i => '@'.$getfile1shop
-                        );
+                    );
                 } else {
                     $getfile1shop_array = array(
                         'file_add_'.$i => ''.$getfile1shop
-                        );
+                    );
                 }
                 unset($data['file_add_'.$i]);
                 $data = array_merge($getfile1shop_array, $data);
@@ -238,7 +255,7 @@ class Request {
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($curl, CURLOPT_FOLLOWLOCATION, 1);
-        curl_setopt($curl, CURLOPT_URL, $url . '?' . $queryString);
+        curl_setopt($curl, CURLOPT_URL, $url);
         curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'PUT');
         $forcurlpost = array_merge($this->params + $data, $sign);
         curl_setopt($curl, CURLOPT_POSTFIELDS, $forcurlpost);

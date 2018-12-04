@@ -18,10 +18,10 @@ class UApiRequest {
         if (!$this->Request) {
             $this->Request = new Request(
                 array(
-                    'oauth_consumer_key'    => 'domik-mechti',
-                    'oauth_consumer_secret' => 'Mn1fZTL6MPLsuhPE1XizupTyuYtpAZ',
-                    'oauth_token'           => 'pitVP00Mg1BuTgy3mkWb1PNb7HuBrSX45Nbg9sGS',
-                    'oauth_token_secret'    => 'gqUlD50YqlKWUo7dC2QkGFtYiykSkZeuM0NCPyyM'
+                    'oauth_consumer_key'    => 'domik-mechti-https',
+                    'oauth_consumer_secret' => 'ktZDhV1NOo.faV4AUiMltWAlzCYwZi',
+                    'oauth_token'           => 'fQM41va5Jyyh1dZf6IcMM.Zgu9xY5xDrHDNX9eOd',
+                    'oauth_token_secret'    => '.cexpbNAo9EnC4s591vGc3eRWwDsx2S4rCMHumpM',
                 )
             );
         }
