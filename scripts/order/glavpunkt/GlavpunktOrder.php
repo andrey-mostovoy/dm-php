@@ -40,7 +40,7 @@ class GlavpunktOrder extends UApiRequest {
     private function makeOrder() {
         $orderData = json_decode(str_replace('\\', '', $_POST['orderData']), true);
         $GlavpunktApi = new GlavpunktAPI($this->login, $this->token);
-        $res = $GlavpunktApi->take_pkgs($orderData);
+        $res = $GlavpunktApi->createShipment($orderData);
 
         return json_encode($res);
     }
